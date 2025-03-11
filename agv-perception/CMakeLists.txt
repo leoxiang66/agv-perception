@@ -17,7 +17,7 @@ find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(OpenCV REQUIRED)
 
-add_executable(main src/main.cpp src/ImageProcessor.cpp)
+add_executable(main src/main.cpp src/ImageProcessor.cpp src/MsgGroup.cpp)
 
 ament_target_dependencies(main
 rclcpp

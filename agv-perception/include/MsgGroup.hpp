@@ -1,24 +1,27 @@
 #ifndef MSGGROUP_HPP
 #define MSGGROUP_HPP
 
+#include <sensor_msgs/msg/point_cloud2.hpp>
+#include <sensor_msgs/msg/image.hpp>
+#include <vector>
+#include <memory>
+
 class MsgGroup {
 public:
-    // 构造函数
-    MsgGroup(int value);
-
-    // 析构函数
+    MsgGroup();
     ~MsgGroup();
 
-    // 公共成员函数
-    void setValue(int value);
-    int getValue() const;
+    void add_image(const sensor_msgs::msg::Image& img);
+    void add_pc2(std::shared_ptr<sensor_msgs::msg::PointCloud2> pc2);
+
+    std::shared_ptr<sensor_msgs::msg::PointCloud2> get_point_cloud() const;
+    const std::vector<sensor_msgs::msg::Image>& get_images() const;
 
 private:
-    // 私有成员变量
-    int m_value;
+    std::shared_ptr<sensor_msgs::msg::PointCloud2> point_cloud_;
+    std::vector<sensor_msgs::msg::Image> imgs_;
 
-    // 私有成员函数
-    void printValue() const; // 新增的私有函数
+    bool check_integrity() const;
 };
 
 #endif // MSGGROUP_HPP
