@@ -6,6 +6,10 @@ MsgGroup::~MsgGroup() {}
 
 void MsgGroup::add_pc2(std::shared_ptr<sensor_msgs::msg::PointCloud2> pc2) {
     this->point_cloud_ = pc2;
+
+    if (this->check_integrity()) {
+        // TODO: 触发回调或事件处理
+    }
 }
 
 void MsgGroup::add_image(const sensor_msgs::msg::Image& img) {

@@ -15,15 +15,14 @@ ImageProcessor::ImageProcessor() : Node("image_processor") {
 void ImageProcessor::compressedImageCallback(const sensor_msgs::msg::CompressedImage::SharedPtr msg) {
     try {
         // 将压缩图像转换为 OpenCV 格式
-        cv::Mat image = cv::imdecode(cv::Mat(msg->data), cv::IMREAD_COLOR);
+        std::shared_ptr<cv::Mat> img = uncompress_image(msg);
 
-        if (image.empty()) {
-            RCLCPP_ERROR(this->get_logger(), "Failed to decode compressed image.");
-            return;
+        if (img)
+        {
+            // 发布解压缩后的图像
+            publishImage(*img);
         }
-
-        // 发布解压缩后的图像
-        publishImage(image);
+        
     } catch (const cv::Exception& e) {
         RCLCPP_ERROR(this->get_logger(), "OpenCV Exception: %s", e.what());
     }

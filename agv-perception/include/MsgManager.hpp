@@ -1,0 +1,8 @@
+#ifndef MSGMANAGER_HPP
+#define MSGMANAGER_HPP
+
+
+
+
+
+#endif // !MSGMANAGER_HPP
