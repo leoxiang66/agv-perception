@@ -12,7 +12,7 @@ std::shared_ptr<cv::Mat> uncompress_image(const sensor_msgs::msg::CompressedImag
             return nullptr;
         }
 
-        return std::make_shared<cv::Mat>(image);  // 使用智能指针自动管理内存
+        return std::make_shared<cv::Mat>(image); 
 
     } catch (const cv::Exception& e) {
         std::cerr << "OpenCV Exception: " << e.what() << std::endl;
