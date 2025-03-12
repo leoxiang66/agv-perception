@@ -12,5 +12,7 @@
 
 
 std::shared_ptr<cv::Mat> uncompress_image(const sensor_msgs::msg::CompressedImage::SharedPtr msg);
+std::string nanosec2date(uint64_t nanoseconds);
+
 
 #endif // !UTILS_HPP

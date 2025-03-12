@@ -35,5 +35,5 @@ void ImageProcessor::publishImage(const cv::Mat& image) {
 
     // 发布图像
     image_pub_->publish(*msg);
-    RCLCPP_INFO(this->get_logger(), "Published uncompressed image.");
+    // RCLCPP_INFO(this->get_logger(), "Published uncompressed image.");
 }

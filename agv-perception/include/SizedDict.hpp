@@ -25,12 +25,16 @@ public:
         data[key] = value;
     }
 
-    std::optional<V> get(const K& key) const {
-        auto it = data.find(key);
-        if (it != data.end()) {
-            return it->second;
-        }
-        return std::nullopt;
+    V get(const K& key) const {
+        return data.at(key);
+    }
+
+    std::deque<K> get_keys() const {
+        return keys;
+    }
+
+    bool contains(const K& key) const {
+        return std::find(keys.begin(), keys.end(), key) != keys.end();
     }
 };
 

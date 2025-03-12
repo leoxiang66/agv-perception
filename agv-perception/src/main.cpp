@@ -1,5 +1,6 @@
 #include "utils.hpp"
 #include "ImageProcessor.hpp"
+#include "MsgManager.hpp"
 #include <rclcpp/rclcpp.hpp>
 
 int main(int argc, char** argv) {
@@ -7,10 +8,15 @@ int main(int argc, char** argv) {
     rclcpp::init(argc, argv);
 
     // 创建 ImageProcessor 节点
-    auto node = std::make_shared<ImageProcessor>();
+    auto node1 = std::make_shared<ImageProcessor>();
 
-    // 运行节点
-    rclcpp::spin(node);
+    auto node2 = std::make_shared<MsgManager>();
+
+    rclcpp::executors::MultiThreadedExecutor executor;
+    executor.add_node(node1);
+    executor.add_node(node2);
+    executor.spin();
+
 
     // 关闭 ROS2
     rclcpp::shutdown();
