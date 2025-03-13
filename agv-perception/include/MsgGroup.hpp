@@ -28,8 +28,8 @@ private:
     std::shared_ptr<sensor_msgs::msg::PointCloud2> point_cloud_;
     std::vector<sensor_msgs::msg::Image::SharedPtr> imgs_;
 
-    bool check_integrity() const;
-
+    bool check_integrity();
+    std::mutex mtx;
 };
 
 #endif // MSGGROUP_HPP

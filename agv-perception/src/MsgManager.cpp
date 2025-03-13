@@ -21,10 +21,8 @@ void MsgManager::compressedImageCallback(const sensor_msgs::msg::CompressedImage
     rclcpp::Time timestamp =  msg->header.stamp;
     uint64_t nanosec =  timestamp.nanoseconds();
 
-    // std::cout << nanosec2date(nanosec) << std::endl;
     auto key = nanosec2date(nanosec);
     key = key.substr(0, key.size() - 8);
-    std::cout << "Image分配到 "<< key<< std::endl;
 
     // TODO: 在实际中直接处理原图
     cv_bridge::CvImage cv_img;
@@ -36,11 +34,11 @@ void MsgManager::compressedImageCallback(const sensor_msgs::msg::CompressedImage
     if (this->all_msgs.contains(key))
     {
         auto msg_group = all_msgs.get(key);
-        msg_group.add_image(img_msg);
+        msg_group->add_image(img_msg);
     }else
     {
-        MsgGroup msg_group;
-        msg_group.add_image(img_msg);
+        auto msg_group = std::make_shared<MsgGroup>();
+        msg_group->add_image(img_msg);
         all_msgs.insert(key,msg_group);
     }
 
@@ -53,20 +51,18 @@ void MsgManager::pc2Callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
     rclcpp::Time timestamp =  msg->header.stamp;
     uint64_t nanosec =  timestamp.nanoseconds();
 
-    // std::cout << nanosec2date(nanosec) << std::endl;
+  
     auto key = nanosec2date(nanosec);
     key = key.substr(0, key.size() - 8);
-
-    std::cout << "PC2分配到 "<< key<< std::endl;
 
     if (this->all_msgs.contains(key))
     {
         auto msg_group = all_msgs.get(key);
-        msg_group.add_pc2(msg);
+        msg_group->add_pc2(msg);
     }else
     {
-        MsgGroup msg_group;
-        msg_group.add_pc2(msg);
+        auto msg_group = std::make_shared<MsgGroup>();
+        msg_group->add_pc2(msg);
         all_msgs.insert(key,msg_group);
     }
 

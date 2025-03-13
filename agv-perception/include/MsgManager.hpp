@@ -19,7 +19,7 @@ class MsgManager : public rclcpp::Node {
         ~MsgManager();
 
     private:
-        SizedDict<std::string, MsgGroup> all_msgs;
+        SizedDict<std::string, std::shared_ptr<MsgGroup>> all_msgs;
         rclcpp::Subscription<sensor_msgs::msg::CompressedImage>::SharedPtr compressed_image_sub_;
         rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr pc2_sub_;
 

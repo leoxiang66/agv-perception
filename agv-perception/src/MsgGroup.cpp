@@ -7,25 +7,24 @@ MsgGroup::MsgGroup() : point_cloud_(nullptr) {
 MsgGroup::~MsgGroup() {}
 
 void MsgGroup::add_pc2(std::shared_ptr<sensor_msgs::msg::PointCloud2> pc2) {
-    
+    mtx.lock();
     this->point_cloud_ = pc2;
+    mtx.unlock();
 
     if (this->check_integrity()) {
         // TODO: 触发回调或事件处理
-        std::cout << "complete" << std::endl;
     }
 }
 
 void MsgGroup::add_image(const sensor_msgs::msg::Image::SharedPtr img) {
-    
+    mtx.lock();
     this->imgs_.push_back(img);
+    mtx.unlock();
 
     if (this->check_integrity()) {
         // TODO: 触发回调或事件处理
-        std::cout << "complete" << std::endl;
+        print_info();
     }
-
-    // print_info();
 }
 
 std::shared_ptr<sensor_msgs::msg::PointCloud2> MsgGroup::get_point_cloud() const {
@@ -38,12 +37,16 @@ const std::vector<sensor_msgs::msg::Image::SharedPtr>& MsgGroup::get_images() co
     return imgs_;
 }
 
-bool MsgGroup::check_integrity() const {
+bool MsgGroup::check_integrity() {
     
     // std::cout << imgs_.size() << std::endl;
     // bool temp = this->point_cloud_ != nullptr;
     // std::cout <<"PC2: " << temp << std::endl;
-    return this->imgs_.size() == 2 && this->point_cloud_ != nullptr;
+    mtx.lock();
+    auto temp = this->imgs_.size() == 2 && this->point_cloud_ != nullptr;
+    mtx.unlock();
+
+    return temp;
 }
 
 void MsgGroup::print_info() const {
