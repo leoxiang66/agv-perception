@@ -1,4 +1,4 @@
-#include "MsgGroup.hpp"
+#include "sensing/MsgGroup.hpp"
 
 
 MsgGroup::MsgGroup() : point_cloud_(nullptr) {

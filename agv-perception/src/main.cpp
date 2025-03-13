@@ -1,6 +1,6 @@
 #include "utils.hpp"
 #include "ImageProcessor.hpp"
-#include "MsgManager.hpp"
+#include "sensing/MsgManager.hpp"
 #include <rclcpp/rclcpp.hpp>
 
 int main(int argc, char** argv) {

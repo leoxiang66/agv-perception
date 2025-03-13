@@ -20,7 +20,7 @@ find_package(PCL REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(pcl_ros REQUIRED)
 
-add_executable(main src/main.cpp src/ImageProcessor.cpp src/MsgGroup.cpp src/utils.cpp  src/MsgManager.cpp)
+add_executable(main src/main.cpp src/ImageProcessor.cpp src/sensing/MsgGroup.cpp src/utils.cpp  src/sensing/MsgManager.cpp)
 
 ament_target_dependencies(main
 rclcpp
