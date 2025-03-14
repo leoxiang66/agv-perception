@@ -23,6 +23,7 @@
  #include <pcl/point_types.h>
  #include <pcl/segmentation/extract_clusters.h>
  #include <pcl/filters/extract_indices.h>
+ #include <pcl/visualization/pcl_visualizer.h>
  
  /**
   * @brief Converts a ROS 2 PointCloud2 message to a PCL point cloud.

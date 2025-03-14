@@ -90,3 +90,28 @@
  
      return clusters;
  }
+
+
+ void visualizeClusters(const std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr>& clusters) {
+    pcl::visualization::PCLVisualizer viewer("Cluster Visualization");
+    int cluster_id = 0;
+    std::vector<uint8_t> colors = {255, 0, 0, 0, 255, 0, 0, 0, 255};  // RGB colors
+
+    for (const auto& cluster : clusters) {
+        pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color_handler(
+            cluster, colors[(cluster_id % 3) * 3], colors[(cluster_id % 3) * 3 + 1], colors[(cluster_id % 3) * 3 + 2]);
+
+        viewer.addPointCloud(cluster, color_handler, "cluster_" + std::to_string(cluster_id));
+        cluster_id++;
+    }
+
+    viewer.setBackgroundColor(0, 0, 0);
+    viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3);
+    viewer.addCoordinateSystem(1.0);
+    viewer.initCameraParameters();
+
+    while (!viewer.wasStopped()) {
+        viewer.spinOnce();
+    }
+}
+
