@@ -66,8 +66,4 @@ void MsgManager::pc2Callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
         all_msgs.insert(key,msg_group);
     }
 
-    // for(auto key : all_msgs.get_keys())
-    // {
-    //     all_msgs.get(key).print_info();
-    // }
 }

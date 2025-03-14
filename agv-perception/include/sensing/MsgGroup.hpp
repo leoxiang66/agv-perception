@@ -8,6 +8,7 @@
 #include <iostream>
 #include "utils.hpp"
 #include <mutex>
+#include "pc-clustering/ece.hpp"
 
 class MsgGroup {
 public:
