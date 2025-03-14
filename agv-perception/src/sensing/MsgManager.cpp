@@ -10,6 +10,10 @@ MsgManager::MsgManager() : Node("msg_manager"), all_msgs(10)
         "/livox/lidar", 10,
         std::bind(&MsgManager::pc2Callback, this, std::placeholders::_1));
 
+
+    // dev
+    pc2_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/clustered_cloud", 10);
+
     RCLCPP_INFO(this->get_logger(), "Msg Manager node started.");
 }
 
@@ -66,4 +70,38 @@ void MsgManager::pc2Callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
         all_msgs.insert(key,msg_group);
     }
 
+    // dev
+    auto temp1 = pc2ToPCL(msg);
+    auto temp2 = buildKdTree(temp1);
+    auto temp3 = performClustering(temp1, temp2);
+    auto temp4 = extractClusterPoints(temp1, temp3);
+    publishClusters(temp4);
+}
+
+
+void MsgManager::publishClusters(const std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> &clusters) {
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr colored_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+    std::vector<uint8_t> colors = {255, 0, 0, 0, 255, 0, 0, 0, 255};  // RGB colors
+    for (size_t i = 0; i < clusters.size(); ++i) {
+        uint8_t r = colors[(i % 3) * 3];
+        uint8_t g = colors[(i % 3) * 3 + 1];
+        uint8_t b = colors[(i % 3) * 3 + 2];
+
+        for (const auto &point : clusters[i]->points) {
+            pcl::PointXYZRGB p;
+            p.x = point.x;
+            p.y = point.y;
+            p.z = point.z;
+            p.r = r;
+            p.g = g;
+            p.b = b;
+            colored_cloud->push_back(p);
+        }
+    }
+
+    sensor_msgs::msg::PointCloud2 output_msg;
+    pcl::toROSMsg(*colored_cloud, output_msg);
+    output_msg.header.frame_id = "livox_frame";  
+    pc2_pub_->publish(output_msg);
 }

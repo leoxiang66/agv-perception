@@ -27,21 +27,7 @@ void MsgGroup::add_image(const sensor_msgs::msg::Image::SharedPtr img)
     {
         // TODO: 触发回调或事件处理
         print_info();
-        auto temp1 = pc2ToPCL(point_cloud_);
-
-        // std::cout << "Total points in cloud: " << temp1->points.size() << std::endl;
-        // for (size_t i = 0; i < std::min((size_t)10, temp1->points.size()); i++)
-        // {
-        //     std::cout << "Point " << i << ": (" << temp1->points[i].x
-        //               << ", " << temp1->points[i].y
-        //               << ", " << temp1->points[i].z << ")" << std::endl;
-        // }
-
-        auto temp2 = buildKdTree(temp1);
-        auto temp3 = performClustering(temp1, temp2);
-        auto temp4 = extractClusterPoints(temp1, temp3);
-
-        // test2(temp1);
+    
     }
 }
 

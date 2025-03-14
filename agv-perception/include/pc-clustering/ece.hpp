@@ -17,6 +17,7 @@
 #ifndef ECE_HPP
 #define ECE_HPP
 
+#include <cmath>
 #include <pcl/search/kdtree.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_cloud.h>

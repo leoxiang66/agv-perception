@@ -23,10 +23,16 @@ class MsgManager : public rclcpp::Node {
         rclcpp::Subscription<sensor_msgs::msg::CompressedImage>::SharedPtr compressed_image_sub_;
         rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr pc2_sub_;
 
+        // dev:
+        rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pc2_pub_;
+
 
 
         void compressedImageCallback(const sensor_msgs::msg::CompressedImage::SharedPtr msg);                                                
         void pc2Callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
+
+        // dev
+        void publishClusters(const std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> &clusters);
 };
 
 #endif // !MSGMANAGER_HPP

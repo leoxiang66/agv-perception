@@ -8,22 +8,8 @@
  * @return pcl::PointCloud<pcl::PointXYZ>::Ptr Converted PCL point cloud.
  */
 pcl::PointCloud<pcl::PointXYZ>::Ptr pc2ToPCL(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
-    // 创建 PCL 点云对象
+
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
-
-    // // 检查 ROS 消息的字段
-    // std::cout << "Fields in PointCloud2 message:" << std::endl;
-    // for (const auto& field : msg->fields) {
-    //     std::cout << "Field: " << field.name << " (Offset: " << field.offset << ")" << std::endl;
-    // }
-
-    // // 检查 PointCloud2 数据是否为空
-    // if (msg->data.empty()) {
-    //     std::cout << "Error: Received empty PointCloud2 message!" << std::endl;
-    //     return cloud;
-    // }
-
-    // 将 PointCloud2 转换为 PCL 点云格式
     pcl::fromROSMsg(*msg, *cloud);
 
     // 检查转换后的点云是否为空
@@ -36,7 +22,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr pc2ToPCL(const sensor_msgs::msg::PointCloud2
     // 删除 (0, 0, 0) 的点
     cloud->points.erase(
         std::remove_if(cloud->points.begin(), cloud->points.end(), [](const pcl::PointXYZ& point) {
-            return (point.x == 0.0f && point.y == 0.0f && point.z == 0.0f);
+            return (point.x == 0.0f && point.y == 0.0f && point.z == 0.0f) || (std::abs(point.z) >=3.0f) || (std::abs(point.x)>=5.0f) || (std::abs(point.y) >= 3.0f);
         }),
         cloud->points.end()
     );
@@ -44,16 +30,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr pc2ToPCL(const sensor_msgs::msg::PointCloud2
     // 打印删除后的点云信息
     std::cout << "After removing (0, 0, 0) points, Total points: " << cloud->points.size() << std::endl;
 
-    // // 打印前 10 个点的坐标
-    // std::cout << "First 10 points after conversion and removal:" << std::endl;
-    // for (size_t i = 0; i < std::min((size_t)10, cloud->points.size()); i++) {
-    //     std::cout << "Point " << i << ": ("
-    //               << cloud->points[i].x << ", "
-    //               << cloud->points[i].y << ", "
-    //               << cloud->points[i].z << ")" << std::endl;
-    // }
-
-    // 返回转换后的点云
     return cloud;
 }
 
@@ -67,8 +43,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr pc2ToPCL(const sensor_msgs::msg::PointCloud2
 pcl::search::KdTree<pcl::PointXYZ>::Ptr buildKdTree(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud) {
     pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
     tree->setInputCloud(cloud);  // Set input cloud for nearest neighbor search
-
-    // std::cout << "KdTree built with " << cloud->points.size() << " points." << std::endl;
 
     return tree;
 }
@@ -88,9 +62,9 @@ std::vector<pcl::PointIndices> performClustering(
 
     // Euclidean Cluster Extraction
     pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
-    ec.setClusterTolerance(1);  // Set cluster distance threshold (meters)
-    ec.setMinClusterSize(500);     // Minimum number of points in a cluster
-    ec.setMaxClusterSize(25000);   // Maximum number of points in a cluster
+    ec.setClusterTolerance(0.5);  // Set cluster distance threshold (meters)
+    ec.setMinClusterSize(100);     // Minimum number of points in a cluster
+    ec.setMaxClusterSize(5000);   // Maximum number of points in a cluster
     ec.setSearchMethod(tree);
     ec.setInputCloud(cloud);
 
