@@ -1,3 +1,5 @@
+# CMakeLists.txt 顶部 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 cmake_minimum_required(VERSION 3.8)
 project(agv-perception)
 
@@ -20,7 +22,7 @@ find_package(PCL REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(pcl_ros REQUIRED)
 
-add_executable(main src/main.cpp src/ImageProcessor.cpp src/sensing/MsgGroup.cpp src/utils.cpp  src/sensing/MsgManager.cpp src/pc-clustering/ece.cpp)
+add_executable(main src/main.cpp src/ImageProcessor.cpp src/sensing/MsgGroup.cpp src/utils.cpp  src/sensing/MsgManager.cpp src/pc-clustering/ece.cpp src/sensing/inference.cpp)
 
 ament_target_dependencies(main
 rclcpp

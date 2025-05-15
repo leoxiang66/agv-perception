@@ -1,4 +1,5 @@
 #include "sensing/MsgManager.hpp"
+#include "global.hpp"
 
 MsgManager::MsgManager() : Node("msg_manager"), all_msgs(10)
 {
@@ -35,47 +36,54 @@ void MsgManager::compressedImageCallback(const sensor_msgs::msg::CompressedImage
     cv_img.image = *uncompress_image(msg);
     auto img_msg = cv_img.toImageMsg();
 
-    if (this->all_msgs.contains(key))
-    {
-        auto msg_group = all_msgs.get(key);
-        msg_group->add_image(img_msg);
-    }else
-    {
-        auto msg_group = std::make_shared<MsgGroup>();
-        msg_group->add_image(img_msg);
-        all_msgs.insert(key,msg_group);
-    }
+    img_chan.push(img_msg);
+
+    // if (this->all_msgs.contains(key))
+    // {
+    //     auto msg_group = all_msgs.get(key);
+    //     msg_group->add_image(img_msg);
+    // }else
+    // {
+    //     auto msg_group = std::make_shared<MsgGroup>();
+    //     msg_group->add_image(img_msg);
+    //     all_msgs.insert(key,msg_group);
+    // }
 
 
 }
 
 void MsgManager::pc2Callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
 {
+
+    pc2_chan.push(msg);
+
     // 回调处理逻辑
-    rclcpp::Time timestamp =  msg->header.stamp;
-    uint64_t nanosec =  timestamp.nanoseconds();
+    // rclcpp::Time timestamp =  msg->header.stamp;
+    // uint64_t nanosec =  timestamp.nanoseconds();
 
   
-    auto key = nanosec2date(nanosec);
-    key = key.substr(0, key.size() - 8);
+    // auto key = nanosec2date(nanosec);
+    // key = key.substr(0, key.size() - 8);
 
-    if (this->all_msgs.contains(key))
-    {
-        auto msg_group = all_msgs.get(key);
-        msg_group->add_pc2(msg);
-    }else
-    {
-        auto msg_group = std::make_shared<MsgGroup>();
-        msg_group->add_pc2(msg);
-        all_msgs.insert(key,msg_group);
-    }
+    
+
+    // if (this->all_msgs.contains(key))
+    // {
+    //     auto msg_group = all_msgs.get(key);
+    //     msg_group->add_pc2(msg);
+    // }else
+    // {
+    //     auto msg_group = std::make_shared<MsgGroup>();
+    //     msg_group->add_pc2(msg);
+    //     all_msgs.insert(key,msg_group);
+    // }
 
     // dev
-    auto temp1 = pc2ToPCL(msg);
-    auto temp2 = buildKdTree(temp1);
-    auto temp3 = performClustering(temp1, temp2);
-    auto temp4 = extractClusterPoints(temp1, temp3);
-    publishClusters(temp4);
+    // auto temp1 = pc2ToPCL(msg);
+    // auto temp2 = buildKdTree(temp1);
+    // auto temp3 = performClustering(temp1, temp2);
+    // auto temp4 = extractClusterPoints(temp1, temp3);
+    // publishClusters(temp4);
 }
 
 

@@ -1,4 +1,5 @@
 #include "ImageProcessor.hpp"
+#include "blocking_queue.hpp"
 
 ImageProcessor::ImageProcessor() : Node("image_processor") {
     // 订阅压缩图像的 topic
