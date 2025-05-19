@@ -5,5 +5,5 @@
 - [x]  compressed image → opencv image
 - [x]  sensor msgs 配对
 - [x]  点云聚类， 获得每个cluster的位置
-- [ ]  图像进行目标检测
+- [x]  图像进行目标检测
 - [ ]  点云cluster映射到图像，匹配检测框
